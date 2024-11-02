@@ -6,7 +6,7 @@
 #    By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/10 12:55:15 by bazaluga          #+#    #+#              #
-#    Updated: 2024/11/02 16:25:15 by bazaluga         ###   ########.fr        #
+#    Updated: 2024/11/02 17:50:31 by bazaluga         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -18,7 +18,9 @@ OBJDIR	    :=	obj
 
 INCDIR	    :=	include
 
-SRC			:=	ft_putstr_fd.c
+SRC			:=	ft_atoi.c \
+				ft_putstr_fd.c \
+				main_utils.c
 
 MAIN		:=	main.c
 
