@@ -1,0 +1,79 @@
+* Threads in C (cheat sheet)
+** Intro
+- Threads share same heap, same code, same shared libs & same fds.
+- Faster than multiple processes
+- No hierarchy between threads: all threads can wait or kill other threads. Main thread is the first that has been created at process's startup.
+
+** Basic use of POSIX Threads
+*** Include
+- ~# include <pthread.h>~
+
+*** Compilation flag
+- ~-pthread~
+
+*** Thread creation
+#+begin_src c
+int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr,
+    void *(*start_routine)(void *), void *restrict arg);
+#+end_src
+- ~thread~: pointer to var of type pthread_t to keep id of the thread that will be created
+- ~attr~: can change default attributes of the thread. (~NULL~ in most of the cases).
+- ~start_routine~: the thread will start with this function. When the thread reaches the end of the function, it has done all its tasks.
+- ~arg~: pointer to the argument to be transmitted to the function.
+- ~RETURN VALUE~: 0 if success, else an error code.
+
+*** Waiting for thread to finish
+(like waitpid for processes)
+#+begin_src c
+int pthread_join(pthread_t thread, void **retval);
+#+end_src
+- ~thread~: id of the thread to wait for. The thread must be joinable (not detached).
+- ~retval~: pointer to variable that can contain return value of the routine function. ~NULL~ if not needed.
+- ~RETURN VALUE~: 0 if success, else an error code.
+
+*** Detaching a thread
+Used if we don't need to wait for the end of the thread. The main thread will get back ressources as soon as it stops. Once a thread is detached, it cannot be killed nor be waited.
+#+begin_src c
+int pthread_detach(pthread_t thread);
+#+end_src
+- ~RETURN VALUE~: 0 if success, else an error code.
+
+** MUTEX
+mutex is for "*mut* ual *ex* clusion". Used to avoid data races (accessing the same ressource at the same time with multiple threads).
+*** Declare mutex variable
+#+begin_src c
+pthread_mutex_t mutex;
+#+end_src
+
+*** Initialize mutex
+#+begin_src c
+int pthread_mutex_init(phthread_mutex_t *mutex, const phtread_mutexattr_t *mutexattr);
+#+end_src
+- ~mutex~: pointer to a ~phtread_mutex_t~ variable we want to initialize.
+- ~mutexattr~: pointer to specific attributes for the mutex (can be NULL).
+- ~RETURN VALUE~: always 0.
+
+*** Lock & unlock mutex
+#+begin_src c
+int phtread_mutex_lock(pthread_mutex_t *mutex); // Lock
+int phtread_mutex_unlock(pthread_mutex_t *mutex); // Unlock
+#+end_src
+- If the mutex is already locked, the function will suspend the calling thread until the mutex is unlocked.
+- For the unlock, the function doesn't check if the mutex is already unlocked. It means that a mutex could be unlocked at the same time by multiple threads.
+- ~RETURN VALUE (same for the 2 functions)~: 0 if success, else an error code.
+
+*** Destroy a mutex
+When a mutex is not needed anymore, we need to destroy it.
+#+begin_src c
+int pthread_mutex_destroy(pthread_mutex_t *mutex);
+#+end_src
+- This function destroys only an unlocked mutex.
+
+*** Deadlocks
+A deadlock occurs when 2 threads are blocking each other: a thread is waiting for a ressource that another thread is using. Example: thread T1 has the mutex M1 & is waiting for M2. In the same time, T2 has M2 & waits for M1. *Deadlock can occur if a thread is waiting a mutex that it already has.*
+
+** Testing thread
+- ~-fsanitize=thread -g~
+- ~valgrind --tool=helgrind~
+- ~valgrind --tool=drd~
+- fsanitize & valgrind cannot be used simultaneously.
