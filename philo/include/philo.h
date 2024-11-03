@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/03 14:44:28 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/03 17:50:24 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
+# include <pthread.h>
 
 typedef struct s_philo	t_philo;
 typedef struct s_table	t_table;
@@ -31,8 +32,11 @@ struct s_table
 
 struct s_philo
 {
-	int	n;
-
+	pthread_t		tid;
+	int				n;
+	t_table			*table;
+	pthread_mutex_t	fork;
+	pthread_mutex_t	*fork2;
 };
 
 /************************************ UTILS ***********************************/

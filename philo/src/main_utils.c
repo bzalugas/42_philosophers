@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/03 14:44:38 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/03 17:59:38 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,13 @@ int	init_philos(t_table *t)
 	{
 		memset(&t->philos[i], 0, sizeof(t_philo));
 		t->philos[i].n = i + 1;
+		t->philos[i].table = t;
+		pthread_mutex_init(&t->philos[i].fork, NULL);
+		if (i > 0)
+			t->philos[i].fork2 = &t->philos[i - 1].fork;
 		i++;
 	}
+	t->philos[0].fork2 = &t->philos[t->n_philos - 1].fork;
 	return (1);
 }
 
