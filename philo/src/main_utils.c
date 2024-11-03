@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/02 17:55:46 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:44:38 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	parse_args(t_table *t, char *av[])
 		return (ft_putstr_fd("Wrong time_to_sleep value\n", STDERR_FILENO), 0);
 	if (av[5])
 	{
-		t->max_eat = ft_atoi(av[5]);
-		if (t->max_eat < 1)
+		t->max_meals = ft_atoi(av[5]);
+		if (t->max_meals < 1)
 			return (ft_putstr_fd("Wrong max eat value\n", STDERR_FILENO), 0);
 	}
 	return (1);

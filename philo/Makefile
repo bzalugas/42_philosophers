@@ -6,7 +6,7 @@
 #    By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/10 12:55:15 by bazaluga          #+#    #+#              #
-#    Updated: 2024/11/02 17:50:31 by bazaluga         ###   ########.fr        #
+#    Updated: 2024/11/03 16:20:31 by bazaluga         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -18,61 +18,60 @@ OBJDIR	    :=	obj
 
 INCDIR	    :=	include
 
-SRC			:=	ft_atoi.c \
-				ft_putstr_fd.c \
-				main_utils.c
+SRC	    :=	ft_atoi.c \
+		ft_putstr_fd.c \
+		main_utils.c
 
-MAIN		:=	main.c
+MAIN	    :=	main.c
 
-OBJ			:=  $(SRC:.c=.o)
+OBJ	    :=  $(SRC:.c=.o)
 
-OBJMAIN		:=	$(MAIN:.c=.o)
+OBJMAIN	    :=	$(MAIN:.c=.o)
 
-SRC	    	:=  $(addprefix $(SRCDIR)/, $(SRC))
+SRC	    :=  $(addprefix $(SRCDIR)/, $(SRC))
 
-OBJ	    	:=  $(addprefix $(OBJDIR)/, $(OBJ))
+OBJ	    :=  $(addprefix $(OBJDIR)/, $(OBJ))
 
-OBJMAIN    	:=  $(addprefix $(OBJDIR)/, $(OBJMAIN))
+OBJMAIN	    :=  $(addprefix $(OBJDIR)/, $(OBJMAIN))
 
-CC	    	:=  cc
+CC	    :=  cc
 
-CFLAGS	    :=  -Wall -Wextra -Werror -I$(INCDIR) -g3
+CFLAGS	    :=  -Wall -Wextra -Werror -pthread -I$(INCDIR) -g3
 
 ########### COLORS ##########
 
-RED		:=  "\033[1;31m"
+RED	:=  "\033[1;31m"
 GREEN	:=  "\033[1;32m"
 RESET	:=  "\033[0m"
 
-all:			$(NAME)
+all:		$(NAME)
 
-bonus:			$(NAME)
+bonus:		$(NAME)
 
 $(OBJDIR):
-				mkdir -p $(OBJDIR)
+		@mkdir -p $(OBJDIR)
 
 $(OBJDIR)/%.o:	$(SRCDIR)/%.c Makefile | $(OBJDIR)
-				@printf $(GREEN)
-				$(CC) $(CFLAGS) -MMD -c $< -o $@
-				@printf $(RESET)
+		@printf $(GREEN)
+		$(CC) $(CFLAGS) -MMD -c $< -o $@
+		@printf $(RESET)
 
-$(NAME):		$(OBJ) $(OBJMAIN)
-				@echo $(GREEN)"LINKING mandatory objects to create <$(NAME)>"
-				$(CC) $(OBJ) $(OBJMAIN) -o $(NAME)
-				@echo "<$(NAME)> Created ✅"$(RESET)
+$(NAME):	$(OBJ) $(OBJMAIN)
+		@echo $(GREEN)"\nLINKING mandatory objects to create <$(NAME)>"
+		$(CC) $(OBJ) $(OBJMAIN) -o $(NAME)
+		@echo "<$(NAME)> Created ✅"$(RESET)
 
 clean:
-				@echo $(RED)"CLEANING OBJS"$(RESET)
-				@rm -rf $(OBJDIR)
+		@echo $(RED)"CLEANING OBJS"$(RESET)
+		@rm -rf $(OBJDIR)
 
-fclean:			clean
-				@echo $(RED)"CLEANING ALL"$(RESET)
-				@rm -f $(NAME)
-				@rm -rf *.dSYM
+fclean:		clean
+		@echo $(RED)"CLEANING ALL"$(RESET)
+		@rm -f $(NAME)
+		@rm -rf *.dSYM
 
-re:				fclean
-				@make -s all
+re:		fclean all
 
--include		$(OBJ:.o=.d)
+-include	$(OBJ:.o=.d)
 
-.PHONY:			all clean fclean re bonus libft
+.PHONY:		all clean fclean re bonus libft

@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/02 17:58:27 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:44:28 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ struct s_table
 	int		die_time;
 	int		eat_time;
 	int		slp_time;
-	int		max_eat;
+	int		max_meals;
 	t_philo	*philos;
 };
 
