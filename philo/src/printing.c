@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/03 18:15:13 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/04 12:54:33 by bazaluga         ###   ########.fr       */
+/*   Created: 2024/11/04 16:00:54 by bazaluga          #+#    #+#             */
+/*   Updated: 2024/11/04 17:15:45 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_putstr_fd(const char *s, int fd)
+void	print_state(t_philo *p, long long timestamp)
 {
-	ssize_t	len;
-	ssize_t	res;
-
-	if (!s)
-		return (0);
-	len = 0;
-	while (s[len])
-		len++;
-	res = write(fd, s, len);
-	if (res < len)
-		return (0);
-	return (1);
+	pthread_mutex_lock(&p->table->fdout);
+	(void)timestamp; //=>code write_number
+	if (p->state == EATING)
+		write(STDOUT_FILENO, "", 1);
+	pthread_mutex_unlock(&p->table->fdout);
 }

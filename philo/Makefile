@@ -6,7 +6,7 @@
 #    By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/10 12:55:15 by bazaluga          #+#    #+#              #
-#    Updated: 2024/11/03 16:20:31 by bazaluga         ###   ########.fr        #
+#    Updated: 2024/11/04 17:14:19 by bazaluga         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,7 +20,10 @@ INCDIR	    :=	include
 
 SRC	    :=	ft_atoi.c \
 		ft_putstr_fd.c \
-		main_utils.c
+		main_utils.c \
+		monitoring.c \
+		printing.c \
+		write_number.c
 
 MAIN	    :=	main.c
 

@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   write_number.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/03 18:15:13 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/04 12:54:33 by bazaluga         ###   ########.fr       */
+/*   Created: 2024/11/04 16:11:20 by bazaluga          #+#    #+#             */
+/*   Updated: 2024/11/04 17:19:24 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_putstr_fd(const char *s, int fd)
+static int	num_len(long long n)
 {
-	ssize_t	len;
-	ssize_t	res;
+	int	len;
 
-	if (!s)
-		return (0);
 	len = 0;
-	while (s[len])
+	while (n)
+	{
 		len++;
-	res = write(fd, s, len);
-	if (res < len)
-		return (0);
-	return (1);
+		n /= 10;
+	}
+	return (len + (len == 0));
+}
+#include <stdio.h>
+#include <limits.h>
+int	write_number(long long n)
+{
+	printf("%lld\n", LLONG_MAX);
+	printf("%d\n", num_len(LLONG_MAX));
+	(void)n;
+	return (0);
 }
