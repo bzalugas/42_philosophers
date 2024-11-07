@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/04 16:40:47 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/07 08:54:57 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ struct s_philo
 /************************************ UTILS ***********************************/
 int			ft_putstr_fd(const char *s, int fd);
 int			ft_atoi(const char *nptr);
-int			write_number(long long n);
+int			write_number(unsigned long long n);
 
 /************************************ MAIN ************************************/
 // main_utils.c

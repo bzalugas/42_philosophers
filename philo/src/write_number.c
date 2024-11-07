@@ -6,13 +6,13 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:11:20 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/04 17:19:24 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/07 09:04:25 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	num_len(long long n)
+static int	num_len(unsigned long long n)
 {
 	int	len;
 
@@ -24,12 +24,26 @@ static int	num_len(long long n)
 	}
 	return (len + (len == 0));
 }
-#include <stdio.h>
-#include <limits.h>
-int	write_number(long long n)
+
+int	write_number(unsigned long long n)
 {
-	printf("%lld\n", LLONG_MAX);
-	printf("%d\n", num_len(LLONG_MAX));
-	(void)n;
+	char	str_nb[21];
+	int		len;
+	int		i;
+
+	if (n < 10)
+	{
+		str_nb[0] = n + '0';
+		write(STDOUT_FILENO, str_nb, 1);
+		return (0);
+	}
+	len = num_len(n);
+	i = len - 1;
+	while (n > 0)
+	{
+		str_nb[i--] = (n % 10) + '0';
+		n /= 10;
+	}
+	write(STDOUT_FILENO, str_nb, len);
 	return (0);
 }
