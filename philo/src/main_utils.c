@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/04 16:08:50 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:43:48 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	init_philos(t_table *t)
 		pthread_mutex_init(&t->philos[i].wr_state, NULL);
 		if (i > 0)
 			t->philos[i].fork2 = &t->philos[i - 1].fork;
+		t->philos[i].state = WAITING;
 		i++;
 	}
 	t->philos[0].fork2 = &t->philos[t->n_philos - 1].fork;
@@ -45,7 +46,10 @@ int	parse_args(t_table *t, char *av[])
 	t->die_time = ft_atoi(av[2]);
 	t->eat_time = ft_atoi(av[3]);
 	t->slp_time = ft_atoi(av[4]);
+	t->start_time = 0;
 	pthread_mutex_init(&t->fdout, NULL);
+	pthread_mutex_init(&t->dead_lock, NULL);
+	pthread_mutex_init(&t->go, NULL);
 	if (t->n_philos < 1)
 		return (ft_putstr_fd("Wrong number of philos\n", STDERR_FILENO), 0);//use stop_error
 	if (t->die_time < 1)

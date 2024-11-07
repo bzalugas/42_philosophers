@@ -6,7 +6,7 @@
 #    By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/10 12:55:15 by bazaluga          #+#    #+#              #
-#    Updated: 2024/11/04 17:14:19 by bazaluga         ###   ########.fr        #
+#    Updated: 2024/11/07 09:52:21 by bazaluga         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -23,7 +23,8 @@ SRC	    :=	ft_atoi.c \
 		main_utils.c \
 		monitoring.c \
 		printing.c \
-		write_number.c
+		write_number.c \
+		write_state.c
 
 MAIN	    :=	main.c
 
@@ -75,6 +76,6 @@ fclean:		clean
 
 re:		fclean all
 
--include	$(OBJ:.o=.d)
+-include	$(OBJ:.o=.d) $(OBJMAIN:.o=.d)
 
 .PHONY:		all clean fclean re bonus libft
