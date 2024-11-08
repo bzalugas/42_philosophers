@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/07 12:43:48 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:23:47 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <unistd.h>
+
+int	init_table(t_table *t)
+{
+	*t = (t_table){-1, .philos = NULL};
+	if (pthread_mutex_init(&t->fdout, NULL))
+		return (0);
+	if (pthread_mutex_init(&t->dead_lock, NULL))
+		return (0);
+	return (1);
+}
 
 int	init_philos(t_table *t)
 {
@@ -28,28 +38,24 @@ int	init_philos(t_table *t)
 		memset(&t->philos[i], 0, sizeof(t_philo));
 		t->philos[i].n = i + 1;
 		t->philos[i].table = t;
-		pthread_mutex_init(&t->philos[i].fork, NULL);
+		pthread_mutex_init(&t->philos[i].fork1, NULL);
 		pthread_mutex_init(&t->philos[i].wr_state, NULL);
 		if (i > 0)
-			t->philos[i].fork2 = &t->philos[i - 1].fork;
-		t->philos[i].state = WAITING;
+			t->philos[i].fork2 = &t->philos[i - 1].fork1;
+		t->philos[i].state = THINKING;
 		i++;
 	}
-	t->philos[0].fork2 = &t->philos[t->n_philos - 1].fork;
+	t->philos[0].fork2 = &t->philos[t->n_philos - 1].fork1;
 	return (1);
 }
 
 int	parse_args(t_table *t, char *av[])
 {
-	*t = (t_table){-1, .philos = NULL};
 	t->n_philos = ft_atoi(av[1]);
 	t->die_time = ft_atoi(av[2]);
 	t->eat_time = ft_atoi(av[3]);
 	t->slp_time = ft_atoi(av[4]);
 	t->start_time = 0;
-	pthread_mutex_init(&t->fdout, NULL);
-	pthread_mutex_init(&t->dead_lock, NULL);
-	pthread_mutex_init(&t->go, NULL);
 	if (t->n_philos < 1)
 		return (ft_putstr_fd("Wrong number of philos\n", STDERR_FILENO), 0);//use stop_error
 	if (t->die_time < 1)
@@ -74,8 +80,8 @@ int	clean_program(t_table *t, int return_code)
 	i = -1;
 	while (++i < t->n_philos)
 	{
-		pthread_mutex_unlock(&t->philos[i].fork);
-		pthread_mutex_destroy(&t->philos[i].fork);
+		pthread_mutex_unlock(&t->philos[i].fork1);
+		pthread_mutex_destroy(&t->philos[i].fork1);
 	}
 	return (return_code);
 }

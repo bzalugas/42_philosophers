@@ -6,34 +6,13 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:57:22 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/07 13:56:43 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:32:18 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <pthread.h>
 #include <stdio.h>
-
-static void	*philo_routine(void *data)
-{
-	t_philo	*p;
-//do a copy of p->table->start_time
-	p = (t_philo *)data;
-	pthread_mutex_lock(&p->table->go);
-	p->last_meal = p->table->start_time;
-	pthread_mutex_unlock(&p->table->go);
-	while (1)
-	{
-		pthread_mutex_lock(&p->table->dead_lock);
-		if (p->table->dead)
-		{
-			pthread_mutex_unlock(&p->table->dead_lock);
-			break ;
-		}
-		pthread_mutex_unlock(&p->table->dead_lock);
-	}
-	return (NULL);
-}
 
 static int	run_philos(t_table *t)
 {
@@ -42,11 +21,15 @@ static int	run_philos(t_table *t)
 	int		res;
 
 	philos = t->philos;
-	pthread_mutex_lock(&t->go);
+	t->start_time = get_timestamp();
 	i = -1;
 	while (++i < t->n_philos)
-		if (pthread_create(&philos[i].tid, NULL, &philo_routine, &philos[i]))
+	{
+		philos[i].last_meal = t->start_time;
+		if (pthread_create(&philos[i].tid, NULL, (void *)(void *)philo_routine,
+			&philos[i]))
 			return (stop_error(t, true, "Error creating philos threads\n"));
+	}
 	res = monitoring(t);
 	i = -1;
 	while (++i < t->n_philos)
@@ -60,11 +43,10 @@ int	main(int ac, char *av[])
 	t_table	table;
 
 	if (ac < 5 || ac > 6)
-	{
-		ft_putstr_fd("Wrong argument number: ./philo n_philos time_to_die \
-time_to_eat time_to_sleep [max_eating_number]\n", STDERR_FILENO);
+		return (stop_error(&table, false, "Wrong argument number: ./philo \
+n_philos time_to_die time_to_eat time_to_sleep [max_eating_number]\n"));
+	if (!init_table(&table))
 		return (1);
-	}
 	if (!parse_args(&table, av))
 		return (1);
 	if (!init_philos(&table))

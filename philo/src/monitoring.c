@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/07 13:51:28 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:18:56 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,21 @@ int	monitoring(t_table *t)
 	long long	timestamp;
 	int			i;
 
-	t->start_time = get_timestamp();
-	pthread_mutex_unlock(&t->go);
 	while (!t->dead)
 	{
 		i = -1;
 		while(++i < t->n_philos && !t->dead)
 		{
 			timestamp = get_timestamp();
-			if (t->philos[i].state != EATING
-				&& t->philos[i].last_meal && timestamp - t->philos[i].last_meal >= t->die_time)
+			if (is_starving(&t->philos[i], timestamp))
 			{
-				pthread_mutex_lock(&t->fdout);
-				write_dead(i + 1, timestamp - t->start_time);
-				pthread_mutex_unlock(&t->fdout);
+				print_state(&t->philos[i], timestamp - t->start_time, true);
 				pthread_mutex_lock(&t->dead_lock);
 				t->dead = true;
 				pthread_mutex_unlock(&t->dead_lock);
-				pthread_mutex_lock(&t->philos[i].wr_state);
-				t->philos[i].state = DEAD;
-				pthread_mutex_unlock(&t->philos[i].wr_state);
+				/* pthread_mutex_lock(&t->philos[i].wr_state); */
+				/* t->philos[i].state = DEAD; */
+				/* pthread_mutex_unlock(&t->philos[i].wr_state); */
 			}
 		}
 	}
