@@ -6,7 +6,7 @@
 #    By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/10 12:55:15 by bazaluga          #+#    #+#              #
-#    Updated: 2024/11/08 08:21:24 by bazaluga         ###   ########.fr        #
+#    Updated: 2024/11/08 12:40:48 by bazaluga         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -23,6 +23,7 @@ SRC	    :=	ft_atoi.c \
 		main_utils.c \
 		monitoring.c \
 		philo.c \
+		philo_utils.c \
 		printing.c \
 		write_number.c
 

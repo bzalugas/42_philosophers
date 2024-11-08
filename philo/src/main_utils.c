@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 10:23:47 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:23:47 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	init_philos(t_table *t)
 		memset(&t->philos[i], 0, sizeof(t_philo));
 		t->philos[i].n = i + 1;
 		t->philos[i].table = t;
+		t->philos[i].n_meals = 0;
 		pthread_mutex_init(&t->philos[i].fork1, NULL);
 		pthread_mutex_init(&t->philos[i].wr_state, NULL);
 		if (i > 0)
