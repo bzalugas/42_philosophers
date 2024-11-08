@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 11:22:29 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:11:53 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,12 @@ int			stop_error(t_table *t, bool clean, const char *msg);
 
 // monitoring.c
 int			monitoring(t_table *t);
-long long	get_timestamp(void);
+long long	get_timestamp(pthread_mutex_t *mutex);
 
 // printing.c
-void	ft_swrite(int fd, const void *buf, size_t count, pthread_mutex_t *mutex);
 void	print_state(t_philo *p, long long timestamp, bool dead);
 
 // philo.c
-/* int		s_usleep(unsigned int usec); */
-bool	is_starving(t_philo *p, long long timestamp);
 void	*philo_routine(t_philo *p);
 
 #endif

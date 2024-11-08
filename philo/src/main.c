@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:57:22 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 09:32:18 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:55:34 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	run_philos(t_table *t)
 	int		res;
 
 	philos = t->philos;
-	t->start_time = get_timestamp();
+	t->start_time = get_timestamp(NULL);
 	i = -1;
 	while (++i < t->n_philos)
 	{
