@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 08:20:19 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/09 13:48:34 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 14:44:28 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int	eat(t_philo *p)
 
 void	*philo_routine(t_philo *p)
 {
-	if (p->table->n_philos <= 1)
-		return (NULL);
 	while (!check_set_dead(p))
 	{
 		if (!eat(p))
