@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 12:23:47 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 13:42:49 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 
 int	init_table(t_table *t)
 {
-	*t = (t_table){-1, .philos = NULL};
+	*t = (t_table){0};
+	if (pthread_mutex_init(&t->wr_full, NULL))
+		return (0);
 	if (pthread_mutex_init(&t->fdout, NULL))
 		return (0);
 	if (pthread_mutex_init(&t->dead_lock, NULL))
@@ -39,6 +41,7 @@ int	init_philos(t_table *t)
 		t->philos[i].n = i + 1;
 		t->philos[i].table = t;
 		t->philos[i].n_meals = 0;
+		t->philos[i].full = false;
 		pthread_mutex_init(&t->philos[i].fork1, NULL);
 		pthread_mutex_init(&t->philos[i].wr_state, NULL);
 		if (i > 0)

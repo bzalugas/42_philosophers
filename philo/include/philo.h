@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 12:45:17 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 13:35:32 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef enum e_philo_state
 	THINKING,
 	SLEEPING,
 	DEAD,
-	ENDED
 }						t_philo_state;
 
 struct s_table
@@ -39,6 +38,9 @@ struct s_table
 	int				eat_time;
 	int				slp_time;
 	int				max_meals;
+	pthread_mutex_t	wr_full;
+	int				n_full_philos;
+	bool			all_full;
 	long long		start_time;
 	pthread_mutex_t	dead_lock;
 	bool			dead;
@@ -58,6 +60,7 @@ struct s_philo
 	int				n_meals;
 	pthread_mutex_t	wr_state;
 	t_philo_state	state;
+	bool			full;
 };
 
 /************************************ UTILS ***********************************/
@@ -84,8 +87,9 @@ void		print_state(t_philo *p, long long timestamp, bool dead);
 void		*philo_routine(t_philo *p);
 
 // philo_utils.c
+bool		check_end(t_philo *p);
 bool		check_set_dead(t_philo *p);
-bool		is_full(t_philo *p);
+bool		check_set_full(t_philo *p);
 int			s_usleep(unsigned int usec, t_philo *p);
 
 #endif

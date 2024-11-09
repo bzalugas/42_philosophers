@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 12:48:46 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 14:36:47 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,48 @@ static bool	is_starving(t_philo *p, long long timestamp)
 {
 	bool	check;
 
+	check = false;
 	pthread_mutex_lock(&p->wr_state);
-	check = p->state != EATING;
-	pthread_mutex_unlock(&p->wr_state);
-	pthread_mutex_lock(&p->wr_last_meal);
-	check = check && (timestamp - p->last_meal >= p->table->die_time);
-	pthread_mutex_unlock(&p->wr_last_meal);
+	if (p->state != EATING)
+	{
+		pthread_mutex_unlock(&p->wr_state);
+		pthread_mutex_lock(&p->wr_last_meal);
+		check = (timestamp - p->last_meal >= p->table->die_time);
+		pthread_mutex_unlock(&p->wr_last_meal);
+	}
+	else
+		pthread_mutex_unlock(&p->wr_state);
 	return (check);
 }
 
-static bool	philo_ended(t_philo *p)
+static bool	all_philos_full(t_table *t)
 {
 	bool	check;
 
-	pthread_mutex_lock(&p->wr_state);
-	check = p->state == ENDED;
-	pthread_mutex_unlock(&p->wr_state);
+	pthread_mutex_lock(&t->wr_full);
+	check = (t->n_full_philos == t->n_philos);
+	pthread_mutex_unlock(&t->wr_full);
+	t->all_full = check;
+	if (check)
+	{
+		pthread_mutex_lock(&t->dead_lock);
+		t->dead = true;
+		pthread_mutex_unlock(&t->dead_lock);
+	}
 	return (check);
+}
+
+static void	set_end(t_table *t, t_philo *p, bool set_dead_philo)
+{
+	pthread_mutex_lock(&t->dead_lock);
+	t->dead = true;
+	pthread_mutex_unlock(&t->dead_lock);
+	if (set_dead_philo)
+	{
+		pthread_mutex_lock(&p->wr_state);
+		p->state = DEAD;
+		pthread_mutex_unlock(&p->wr_state);
+	}
 }
 
 int	monitoring(t_table *t)
@@ -57,24 +82,23 @@ int	monitoring(t_table *t)
 	long long	timestamp;
 	int			i;
 
-	while (!t->dead)
+	while (!t->dead && !all_philos_full(t))
 	{
 		i = -1;
 		while (++i < t->n_philos && !t->dead)
 		{
+			if (all_philos_full(t))
+			{
+				set_end(t, NULL, false);
+				break ;
+			}
 			timestamp = get_timestamp(NULL);
-			if (!philo_ended(&t->philos[i])
-				&& is_starving(&t->philos[i], timestamp))
+			if (is_starving(&t->philos[i], timestamp))
 			{
 				print_state(&t->philos[i], timestamp - t->start_time, true);
-				pthread_mutex_lock(&t->dead_lock);
-				t->dead = true;
-				pthread_mutex_unlock(&t->dead_lock);
-				pthread_mutex_lock(&t->philos[i].wr_state);
-				t->philos[i].state = DEAD;
-				pthread_mutex_unlock(&t->philos[i].wr_state);
+				set_end(t, &t->philos[i], true);
 			}
 		}
 	}
-	return (t->dead); // diff return if dead or max_meal
+	return (t->dead + 2 * t->all_full);
 }

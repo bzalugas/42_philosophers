@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 08:20:19 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 12:46:31 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 13:48:34 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	eat(t_philo *p)
 	p->n_meals++;
 	pthread_mutex_unlock(&p->fork1);
 	pthread_mutex_unlock(p->fork2);
+	if (check_set_full(p))
+		return (0);
 	return (1);
 }
 
