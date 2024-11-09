@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/09 13:42:49 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 14:35:57 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,18 @@ int	parse_args(t_table *t, char *av[])
 	t->slp_time = ft_atoi(av[4]);
 	t->start_time = 0;
 	if (t->n_philos < 1)
-		return (ft_putstr_fd("Wrong number of philos\n", STDERR_FILENO), 0);//use stop_error
+		return (stop_error(t, false, "Wrong number of philos\n"));
 	if (t->die_time < 1)
-		return (ft_putstr_fd("Wrong time_to_die value\n", STDERR_FILENO), 0);//use stop_error
+		return (stop_error(t, false, "Wrong time_to_die value\n"));
 	if (t->eat_time < 1)
-		return (ft_putstr_fd("Wrong time_to_eat value\n", STDERR_FILENO), 0);//use stop_error
+		return (stop_error(t, false, "Wrong time_to_eat value\n"));
 	if (t->slp_time < 1)
-		return (ft_putstr_fd("Wrong time_to_sleep value\n", STDERR_FILENO), 0);//use stop_error
+		return (stop_error(t, false, "Wrong time_to_sleep value\n"));
 	if (av[5])
 	{
 		t->max_meals = ft_atoi(av[5]);
 		if (t->max_meals < 1)
-			return (ft_putstr_fd("Wrong max eat value\n", STDERR_FILENO), 0);//use stop_error
+			return (stop_error(t, false, "Wrong max eat value\n"));
 	}
 	return (1);
 }
