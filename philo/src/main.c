@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:57:22 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 12:45:33 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 20:01:48 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,24 @@ static int	run_philos(t_table *t)
 
 	philos = t->philos;
 	t->start_time = get_timestamp(NULL);
-	i = -1;
-	while (++i < t->n_philos)
+	i = 0;
+	while (i < t->n_philos)
 	{
 		philos[i].last_meal = t->start_time;
 		if (pthread_create(&philos[i].tid, NULL, (void *)(void *)philo_routine,
 			&philos[i]))
 			return (stop_error(t, true, "Error creating philos threads\n"));
+		i += 2;
+	}
+	usleep(100);
+	i = 1;
+	while (i < t->n_philos)
+	{
+		philos[i].last_meal = t->start_time;
+		if (pthread_create(&philos[i].tid, NULL, (void *)(void *)philo_routine,
+			&philos[i]))
+			return (stop_error(t, true, "Error creating philos threads\n"));
+		i += 2;
 	}
 	res = monitoring(t);
 	i = -1;
@@ -42,6 +53,9 @@ int	main(int ac, char *av[])
 {
 	t_table	table;
 
+	// maybe need to check if all are full in philo or do the test for each philo in monitor
+	// check death before each write
+	// wait +10ms for odds after sleep before think if time_to_eat >= time_to_sleep
 	if (ac < 5 || ac > 6)
 		return (stop_error(&table, false, "Wrong argument number: ./philo \
 n_philos time_to_die time_to_eat time_to_sleep [max_eating_number]\n"));

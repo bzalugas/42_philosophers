@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/09 13:35:32 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:27:34 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ void		*philo_routine(t_philo *p);
 bool		check_end(t_philo *p);
 bool		check_set_dead(t_philo *p);
 bool		check_set_full(t_philo *p);
-int			s_usleep(unsigned int usec, t_philo *p);
+int			s_usleep(long long ms, t_philo *p);
 
 #endif

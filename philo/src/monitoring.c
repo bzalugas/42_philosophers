@@ -6,12 +6,13 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/09 14:36:47 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:02:16 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <pthread.h>
+#include <stdbool.h>
 
 long long	get_timestamp(pthread_mutex_t *mutex)
 {
@@ -39,7 +40,8 @@ static bool	is_starving(t_philo *p, long long timestamp)
 	{
 		pthread_mutex_unlock(&p->wr_state);
 		pthread_mutex_lock(&p->wr_last_meal);
-		check = (timestamp - p->last_meal >= p->table->die_time);
+		if (timestamp - p->last_meal >= p->table->die_time)
+			return (pthread_mutex_unlock(&p->wr_last_meal), true);
 		pthread_mutex_unlock(&p->wr_last_meal);
 	}
 	else
@@ -49,19 +51,18 @@ static bool	is_starving(t_philo *p, long long timestamp)
 
 static bool	all_philos_full(t_table *t)
 {
-	bool	check;
-
 	pthread_mutex_lock(&t->wr_full);
-	check = (t->n_full_philos == t->n_philos);
-	pthread_mutex_unlock(&t->wr_full);
-	t->all_full = check;
-	if (check)
+	if (t->n_full_philos == t->n_philos)
 	{
+		pthread_mutex_unlock(&t->wr_full);
+		t->all_full = true;
 		pthread_mutex_lock(&t->dead_lock);
 		t->dead = true;
 		pthread_mutex_unlock(&t->dead_lock);
+		return (true);
 	}
-	return (check);
+	pthread_mutex_unlock(&t->wr_full);
+	return (false);
 }
 
 static void	set_end(t_table *t, t_philo *p, bool set_dead_philo)
@@ -87,16 +88,16 @@ int	monitoring(t_table *t)
 		i = -1;
 		while (++i < t->n_philos && !t->dead)
 		{
-			if (all_philos_full(t))
-			{
-				set_end(t, NULL, false);
-				break ;
-			}
 			timestamp = get_timestamp(NULL);
 			if (is_starving(&t->philos[i], timestamp))
 			{
 				print_state(&t->philos[i], timestamp - t->start_time, true);
 				set_end(t, &t->philos[i], true);
+			}
+			if (all_philos_full(t))
+			{
+				set_end(t, NULL, false);
+				break ;
 			}
 		}
 	}
