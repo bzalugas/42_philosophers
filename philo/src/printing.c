@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:00:54 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/08 11:18:27 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:57:07 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ void	print_state(t_philo *p, long long timestamp, bool dead)
 	if (!dead)
 		pthread_mutex_lock(&p->wr_state);
 	pthread_mutex_lock(&p->table->fdout);
+	if (check_set_dead(p))
+	{
+		pthread_mutex_unlock(&p->table->fdout);
+		if (!dead)
+			pthread_mutex_unlock(&p->wr_state);
+		return ;
+	}
 	write_number(timestamp, true);
 	write_number(p->n, true);
 	if (dead)
