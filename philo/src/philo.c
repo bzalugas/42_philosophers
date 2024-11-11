@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 08:20:19 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/11 16:17:57 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:40:40 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,18 @@ int	eat_odd(t_philo *p)
 	if (check_set_dead(p))
 		return (unlock_forks(p, true, false), 0);
 	philo_update_state(p, FORKING);
+	pthread_mutex_lock(&p->table->fdout);
 	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
 	if (&p->fork1 == p->fork2)
 		return (unlock_forks(p, true, false), 0);
 	pthread_mutex_lock(p->fork2);
 	if (check_set_dead(p))
 		return (unlock_forks(p, true, true), 0);
+	pthread_mutex_lock(&p->table->fdout);
 	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
 	philo_update_state(p, EATING);
 	p->last_meal = get_timestamp(&p->wr_last_meal);
+	pthread_mutex_lock(&p->table->fdout);
 	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
 	if (!s_usleep(p->table->eat_time, p))
 		return (unlock_forks(p, true, true), 0);
@@ -63,15 +66,18 @@ int	eat_even(t_philo *p)
 	if (check_set_dead(p))
 		return (unlock_forks(p, false, true), 0);
 	philo_update_state(p, FORKING);
+	pthread_mutex_lock(&p->table->fdout);
 	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
 	if (&p->fork1 == p->fork2)
 		return (unlock_forks(p, false, true), 0);
 	pthread_mutex_lock(&p->fork1);
 	if (check_set_dead(p))
 		return (unlock_forks(p, true, true), 0);
+	pthread_mutex_lock(&p->table->fdout);
 	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
 	philo_update_state(p, EATING);
 	p->last_meal = get_timestamp(&p->wr_last_meal);
+	pthread_mutex_lock(&p->table->fdout);
 	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
 	if (!s_usleep(p->table->eat_time, p))
 		return (unlock_forks(p, true, true), 0);
@@ -86,6 +92,8 @@ void	*philo_routine(t_philo *p)
 	bool	even;
 
 	even = (p->n % 2 == 0);
+	pthread_mutex_lock(&p->table->start_lock);
+	pthread_mutex_unlock(&p->table->start_lock);
 	while (!check_set_dead(p))
 	{
 		if (even && !eat_even(p))
@@ -98,12 +106,14 @@ void	*philo_routine(t_philo *p)
 		if (check_set_dead(p))
 			return (NULL);
 		philo_update_state(p, SLEEPING);
+		pthread_mutex_lock(&p->table->fdout);
 		print_state(p, get_timestamp(NULL) - p->table->start_time, false);
 		if (!s_usleep(p->table->slp_time, p))
 			return (NULL);
 		if (check_set_dead(p))
 			return (NULL);
 		philo_update_state(p, THINKING);
+		pthread_mutex_lock(&p->table->fdout);
 		print_state(p, get_timestamp(NULL) - p->table->start_time, false);
 	}
 	return (NULL);

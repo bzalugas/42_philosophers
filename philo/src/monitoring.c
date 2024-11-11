@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/09 16:02:16 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:24:12 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int	monitoring(t_table *t)
 				break ;
 			}
 		}
+		usleep(500);
 	}
 	return (t->dead + 2 * t->all_full);
 }

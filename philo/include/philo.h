@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/09 18:27:34 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:30:44 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ struct s_table
 	int				n_full_philos;
 	bool			all_full;
 	long long		start_time;
+	pthread_mutex_t	start_lock;
 	pthread_mutex_t	dead_lock;
 	bool			dead;
 	pthread_mutex_t	fdout;
