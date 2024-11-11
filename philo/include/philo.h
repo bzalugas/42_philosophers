@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/09 18:27:34 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:44:43 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ struct s_table
 	pthread_mutex_t	dead_lock;
 	bool			dead;
 	pthread_mutex_t	fdout;
+	pthread_mutex_t	start_lock;
 	t_philo			*philos;
 };
 
@@ -66,6 +67,7 @@ struct s_philo
 /************************************ UTILS ***********************************/
 int			ft_putstr_fd(const char *s, int fd);
 int			ft_atoi(const char *nptr);
+char		*ft_lltoa_cpy(long long n, char *nb);
 int			write_number(unsigned long long n, bool space);
 
 /************************************ MAIN ************************************/

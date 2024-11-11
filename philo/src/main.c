@@ -6,11 +6,13 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:57:22 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/11 15:51:25 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:15:45 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
+#include <time.h>
 
 static int	create_threads_philos(t_table *t, t_philo *philos, int start)
 {
@@ -25,7 +27,7 @@ static int	create_threads_philos(t_table *t, t_philo *philos, int start)
 	return (1);
 }
 
-static int	run_philos(t_table *t)
+int	run_philos(t_table *t)
 {
 	int		i;
 	t_philo	*philos;
@@ -33,9 +35,13 @@ static int	run_philos(t_table *t)
 
 	philos = t->philos;
 	t->start_time = get_timestamp(NULL);
+	pthread_mutex_lock(&t->start_lock);
 	create_threads_philos(t, philos, 0);
+	pthread_mutex_unlock(&t->start_lock);
 	usleep(100);
+	pthread_mutex_lock(&t->start_lock);
 	create_threads_philos(t, philos, 1);
+	pthread_mutex_unlock(&t->start_lock);
 	res = monitoring(t);
 	i = -1;
 	while (++i < t->n_philos)
@@ -59,5 +65,5 @@ n_philos time_to_die time_to_eat time_to_sleep [max_eating_number]\n"));
 		return (1);
 	if (!run_philos(&table))
 		return (1);
-	return (0);
+	return (clean_program(&table, 0));
 }
