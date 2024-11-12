@@ -6,11 +6,11 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 18:15:13 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/04 12:54:33 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:12:24 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <unistd.h>
 
 int	ft_putstr_fd(const char *s, int fd)
 {

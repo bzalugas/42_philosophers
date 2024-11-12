@@ -6,11 +6,12 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:39:32 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/11 18:14:56 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:14:52 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <unistd.h>
 
 bool	check_set_dead(t_philo *p)
 {

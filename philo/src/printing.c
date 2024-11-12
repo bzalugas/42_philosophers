@@ -6,11 +6,12 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:00:54 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 11:26:41 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:15:01 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <unistd.h>
 
 void	ft_swrite(int fd, const void *buf, size_t count, pthread_mutex_t *mutex)
 {
@@ -45,24 +46,19 @@ static void	create_str(t_philo *p, long long timestamp, char *str, bool dead)
 	ptr[i] = 0;
 }
 
-void	print_state(t_philo *p, long long timestamp, bool dead)
+void	print_state(t_philo *p, bool dead)
 {
-	char	str[50];
+	char		str[50];
+	long long	timestamp;
 
 	pthread_mutex_lock(&p->table->fdout);
 	timestamp = get_timestamp(NULL, NULL) - p->table->start_time;
 	create_str(p, timestamp, str, dead);
-	if (check_set_dead(p))
+	if (!dead && check_set_dead(p))
 	{
 		pthread_mutex_unlock(&p->table->fdout);
 		return ;
 	}
-	/* write_number(timestamp, true); */
-	/* write_number(p->n, true); */
-	/* if (dead) */
-		/* write(STDOUT_FILENO, "died\n", 5); */
-	/* else */
-		/* ft_putstr_fd(txts[p->state], STDOUT_FILENO); */
 	ft_putstr_fd(str, STDOUT_FILENO);
 	pthread_mutex_unlock(&p->table->fdout);
 }

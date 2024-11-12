@@ -6,11 +6,11 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 11:36:25 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/02 16:38:03 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:12:43 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <unistd.h>
 
 static int	ft_isspace(int c)
 {

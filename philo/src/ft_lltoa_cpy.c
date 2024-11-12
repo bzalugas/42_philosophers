@@ -6,11 +6,11 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:53:32 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/11 17:08:27 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:12:35 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
 
 static size_t	int_size(long n)
 {

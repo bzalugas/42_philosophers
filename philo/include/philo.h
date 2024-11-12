@@ -6,18 +6,14 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 11:20:08 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:15:45 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-# include <unistd.h>
-# include <stdlib.h>
-# include <string.h>
 # include <pthread.h>
 # include <stdbool.h>
-# include <sys/time.h>
 
 typedef struct s_philo	t_philo;
 typedef struct s_table	t_table;
@@ -45,7 +41,6 @@ struct s_table
 	pthread_mutex_t	dead_lock;
 	bool			dead;
 	pthread_mutex_t	fdout;
-	pthread_mutex_t	start_lock;
 	t_philo			*philos;
 };
 
@@ -83,7 +78,7 @@ int			monitoring(t_table *t);
 long long	get_timestamp(pthread_mutex_t *mutex, long long *var);
 
 // printing.c
-void		print_state(t_philo *p, long long timestamp, bool dead);
+void		print_state(t_philo *p, bool dead);
 
 // philo.c
 void		*philo_routine(t_philo *p);

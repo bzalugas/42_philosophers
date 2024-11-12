@@ -6,11 +6,12 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:11:20 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/07 09:17:45 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:15:11 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <unistd.h>
 
 static int	num_len(unsigned long long n)
 {
