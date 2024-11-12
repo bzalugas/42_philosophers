@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:00:54 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/11 18:16:27 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:26:41 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	print_state(t_philo *p, long long timestamp, bool dead)
 	char	str[50];
 
 	pthread_mutex_lock(&p->table->fdout);
-	timestamp = get_timestamp(NULL) - p->table->start_time;
+	timestamp = get_timestamp(NULL, NULL) - p->table->start_time;
 	create_str(p, timestamp, str, dead);
 	if (check_set_dead(p))
 	{

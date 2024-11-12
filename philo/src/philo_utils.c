@@ -44,11 +44,11 @@ int	s_usleep(long long ms, t_philo *p)
 	long long	start;
 	long long	end;
 
-	start = get_timestamp(NULL);
+	start = get_timestamp(NULL, NULL);
 	end = start + ms;
 	while (1)
 	{
-		if (get_timestamp(NULL) >= end)
+		if (get_timestamp(NULL, NULL) >= end)
 			return (1);
 		if (check_set_dead(p))
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 08:20:19 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/11 18:11:27 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:48:28 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ int	eat_odd(t_philo *p)
 	if (check_set_dead(p))
 		return (unlock_forks(p, true, false), 0);
 	philo_update_state(p, FORKING);
-	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
+	print_state(p, get_timestamp(NULL, NULL) - p->table->start_time, false);
 	if (&p->fork1 == p->fork2)
 		return (unlock_forks(p, true, false), 0);
 	pthread_mutex_lock(p->fork2);
 	if (check_set_dead(p))
 		return (unlock_forks(p, true, true), 0);
-	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
+	print_state(p, get_timestamp(NULL, NULL) - p->table->start_time, false);
 	philo_update_state(p, EATING);
-	p->last_meal = get_timestamp(&p->wr_last_meal);
-	print_state(p, get_timestamp(NULL) - p->table->start_time, false);
+	get_timestamp(&p->wr_last_meal, &p->last_meal);
+	print_state(p, get_timestamp(NULL, NULL) - p->table->start_time, false);
 	if (!s_usleep(p->table->eat_time, p))
 		return (unlock_forks(p, true, true), 0);
 	p->n_meals++;
@@ -71,7 +71,7 @@ int	eat_even(t_philo *p)
 		return (unlock_forks(p, true, true), 0);
 	print_state(p, 0, false);
 	philo_update_state(p, EATING);
-	p->last_meal = get_timestamp(&p->wr_last_meal);
+	get_timestamp(&p->wr_last_meal, &p->last_meal);
 	print_state(p, 0, false);
 	if (!s_usleep(p->table->eat_time, p))
 		return (unlock_forks(p, true, true), 0);

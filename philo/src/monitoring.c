@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/09 16:02:16 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:42:47 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <pthread.h>
 #include <stdbool.h>
 
-long long	get_timestamp(pthread_mutex_t *mutex)
+long long	get_timestamp(pthread_mutex_t *mutex, long long *var)
 {
 	long long		res;
 	struct timeval	tv;
@@ -22,9 +22,11 @@ long long	get_timestamp(pthread_mutex_t *mutex)
 	if (mutex)
 		pthread_mutex_lock(mutex);
 	if (gettimeofday(&tv, NULL))
-		return (-1);
+		return (*var = -1, -1);
 	res = 0;
 	res = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+	if (var)
+		*var = res;
 	if (mutex)
 		pthread_mutex_unlock(mutex);
 	return (res);
@@ -88,7 +90,7 @@ int	monitoring(t_table *t)
 		i = -1;
 		while (++i < t->n_philos && !t->dead)
 		{
-			timestamp = get_timestamp(NULL);
+			timestamp = get_timestamp(NULL, NULL);
 			if (is_starving(&t->philos[i], timestamp))
 			{
 				print_state(&t->philos[i], timestamp - t->start_time, true);
