@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 13:13:47 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:28:36 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ int	init_table(t_table *t)
 {
 	*t = (t_table){0};
 	if (pthread_mutex_init(&t->wr_full, NULL))
-		return (0);
+		return (1);
 	if (pthread_mutex_init(&t->fdout, NULL))
-		return (0);
+		return (1);
 	if (pthread_mutex_init(&t->dead_lock, NULL))
-		return (0);
-	return (1);
+		return (1);
+	return (0);
 }
 
 int	init_philos(t_table *t)
@@ -33,7 +33,7 @@ int	init_philos(t_table *t)
 
 	t->philos = malloc(sizeof(t_philo) * t->n_philos);
 	if (!t->philos)
-		return (ft_putstr_fd("malloc error\n", STDERR_FILENO), 0);
+		return (stop_error(t, false, "malloc error\n"));
 	i = 0;
 	while (i < t->n_philos)
 	{
@@ -50,7 +50,7 @@ int	init_philos(t_table *t)
 		i++;
 	}
 	t->philos[0].fork2 = &t->philos[t->n_philos - 1].fork1;
-	return (1);
+	return (0);
 }
 
 int	parse_args(t_table *t, char *av[])
@@ -74,7 +74,7 @@ int	parse_args(t_table *t, char *av[])
 		if (t->max_meals < 1)
 			return (stop_error(t, false, "Wrong max eat value\n"));
 	}
-	return (1);
+	return (0);
 }
 
 int	clean_program(t_table *t, int return_code)
@@ -94,5 +94,5 @@ int	stop_error(t_table *t, bool clean, const char *msg)
 	ft_putstr_fd(msg, STDERR_FILENO);
 	if (clean)
 		return (clean_program(t, 1));
-	return (0);
+	return (1);
 }

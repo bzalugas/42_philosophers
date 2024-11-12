@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 13:15:45 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:21:32 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ struct s_table
 	int				max_meals;
 	pthread_mutex_t	wr_full;
 	int				n_full_philos;
-	bool			all_full;
 	long long		start_time;
 	pthread_mutex_t	dead_lock;
 	bool			dead;

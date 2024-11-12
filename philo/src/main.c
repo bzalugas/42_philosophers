@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:57:22 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 13:13:16 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 14:58:00 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ int	main(int ac, char *av[])
 	if (ac < 5 || ac > 6)
 		return (stop_error(&table, false, "Wrong argument number: ./philo \
 n_philos time_to_die time_to_eat time_to_sleep [max_eating_number]\n"));
-	if (!init_table(&table))
+	if (init_table(&table))
 		return (1);
-	if (!parse_args(&table, av))
+	if (parse_args(&table, av))
 		return (1);
-	if (!init_philos(&table))
+	if (init_philos(&table))
 		return (1);
-	if (!run_philos(&table))
+	if (run_philos(&table))
 		return (1);
 	return (clean_program(&table, 0));
 }

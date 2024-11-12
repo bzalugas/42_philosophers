@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 13:14:06 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:26:59 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static bool	all_philos_full(t_table *t)
 	if (t->n_full_philos == t->n_philos)
 	{
 		pthread_mutex_unlock(&t->wr_full);
-		t->all_full = true;
 		pthread_mutex_lock(&t->dead_lock);
 		t->dead = true;
 		pthread_mutex_unlock(&t->dead_lock);
@@ -105,5 +104,5 @@ int	monitoring(t_table *t)
 			}
 		}
 	}
-	return (t->dead + 2 * t->all_full);
+	return (0);
 }
