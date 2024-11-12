@@ -6,13 +6,14 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 11:42:47 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:14:06 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <pthread.h>
 #include <stdbool.h>
+#include <sys/time.h>
 
 long long	get_timestamp(pthread_mutex_t *mutex, long long *var)
 {
@@ -93,8 +94,9 @@ int	monitoring(t_table *t)
 			timestamp = get_timestamp(NULL, NULL);
 			if (is_starving(&t->philos[i], timestamp))
 			{
-				print_state(&t->philos[i], timestamp - t->start_time, true);
 				set_end(t, &t->philos[i], true);
+				print_state(&t->philos[i], true);
+				break ;
 			}
 			if (all_philos_full(t))
 			{
