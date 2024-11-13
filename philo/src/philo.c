@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 08:20:19 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 13:14:32 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 08:00:34 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	*philo_routine(t_philo *p)
 	{
 		if (even && !eat_even(p))
 			return (NULL);
-		if (!even && !eat_odd(p))
+		else if (!even && !eat_odd(p))
 			return (NULL);
 		if (check_set_dead(p))
 			return (NULL);
@@ -103,7 +103,7 @@ void	*philo_routine(t_philo *p)
 		print_state(p, false);
 		if (p->table->n_philos % 2 != 0
 			&& p->table->eat_time >= p->table->slp_time)
-			usleep((p->table->eat_time - p->table->slp_time) * 1000);
+			usleep((p->table->eat_time - p->table->slp_time) * 1100);
 	}
 	return (NULL);
 }
