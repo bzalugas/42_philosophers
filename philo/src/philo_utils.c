@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:39:32 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/13 10:32:16 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 20:08:01 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ int	s_usleep(long long ms, t_philo *p)
 			return (1);
 		if (check_dead(p))
 			return (0);
-		if (usleep(100))
+		if (usleep(800))
 			return (0);
 		if (get_timestamp(NULL, NULL) >= end)
 			return (1);
 		if (check_dead(p))
 			return (0);
-		if (usleep(100))
+		if (usleep(800))
 			return (0);
 	}
 	return (1);

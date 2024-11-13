@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/13 10:35:23 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 20:10:24 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 long long	get_timestamp(pthread_mutex_t *mutex, long long *var)
 {
@@ -103,6 +104,7 @@ int	monitoring(t_table *t)
 				break ;
 			}
 		}
+		usleep(900);
 	}
 	return (0);
 }
