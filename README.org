@@ -1,2 +1,0 @@
-* Philosophers
-A program to illustrate the threads in C with the *[[https://en.wikipedia.org/wiki/Dining_philosophers_problem][dining philosophers problem]]*.
