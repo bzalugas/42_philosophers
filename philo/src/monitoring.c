@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/13 09:44:30 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 10:35:23 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,20 @@ static bool	is_starving(t_philo *p, long long timestamp)
 	return (check);
 }
 
-static bool	all_philos_full(t_table *t)
-{
-	pthread_mutex_lock(&t->wr_full);
-	if (t->n_full_philos == t->n_philos)
-	{
-		pthread_mutex_unlock(&t->wr_full);
-		pthread_mutex_lock(&t->dead_lock);
-		t->dead = true;
-		pthread_mutex_unlock(&t->dead_lock);
-		return (true);
-	}
-	pthread_mutex_unlock(&t->wr_full);
-	return (false);
-}
+/* static bool	all_philos_full(t_table *t) */
+/* { */
+/* 	pthread_mutex_lock(&t->wr_full); */
+/* 	if (t->n_full_philos == t->n_philos) */
+/* 	{ */
+/* 		pthread_mutex_unlock(&t->wr_full); */
+/* 		pthread_mutex_lock(&t->dead_lock); */
+/* 		t->dead = true; */
+/* 		pthread_mutex_unlock(&t->dead_lock); */
+/* 		return (true); */
+/* 	} */
+/* 	pthread_mutex_unlock(&t->wr_full); */
+/* 	return (false); */
+/* } */
 
 static void	set_end(t_table *t, t_philo *p, bool set_dead_philo)
 {
@@ -86,10 +86,11 @@ int	monitoring(t_table *t)
 	int			i;
 	bool		dead;
 
-	while (!t->dead && !all_philos_full(t))
+	dead = false;
+	while (!dead)
 	{
 		i = -1;
-		while (++i < t->n_philos && !t->dead)
+		while (++i < t->n_philos)
 		{
 			timestamp = get_timestamp(NULL, NULL);
 			pthread_mutex_lock(&t->dead_lock);
@@ -101,11 +102,6 @@ int	monitoring(t_table *t)
 				print_state(&t->philos[i], !dead);
 				break ;
 			}
-			/* if (all_philos_full(t)) */
-			/* { */
-			/* 	set_end(t, NULL, false); */
-			/* 	break ; */
-			/* } */
 		}
 	}
 	return (0);

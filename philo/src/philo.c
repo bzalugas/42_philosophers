@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 08:20:19 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/13 09:26:50 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 10:43:37 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,15 @@ static void	unlock_forks(pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 
 int	eat_odd(t_philo *p)
 {
-	if (check_set_dead(p))
+	if (check_dead(p))
 		return (0);
 	pthread_mutex_lock(&p->fork1);
-	/* if (check_set_dead(p)) */
-		/* return (unlock_forks(&p->fork1, NULL), 0); */
 	philo_update_state(p, FORKING);
 	if (!print_state(p, false))
 		return (unlock_forks(&p->fork1, NULL), 0);
 	if (&p->fork1 == p->fork2)
 		return (unlock_forks(&p->fork1, NULL), 0);
 	pthread_mutex_lock(p->fork2);
-	/* if (check_set_dead(p)) */
-	/* 	return (unlock_forks(p->fork2, &p->fork1), 0); */
 	if (!print_state(p, false))
 		return (unlock_forks(p->fork2, &p->fork1), 0);
 	philo_update_state(p, EATING);
@@ -59,19 +55,15 @@ int	eat_odd(t_philo *p)
 
 int	eat_even(t_philo *p)
 {
-	if (check_set_dead(p))
+	if (check_dead(p))
 		return (0);
 	pthread_mutex_lock(p->fork2);
-	/* if (check_set_dead(p)) */
-	/* 	return (unlock_forks(p->fork2, NULL), 0); */
 	philo_update_state(p, FORKING);
 	if (!print_state(p, false))
 		return (unlock_forks(p->fork2, NULL), 0);
 	if (&p->fork1 == p->fork2)
 		return (unlock_forks(p->fork2, NULL), 0);
 	pthread_mutex_lock(&p->fork1);
-	/* if (check_set_dead(p)) */
-	/* 	return (unlock_forks(&p->fork1, p->fork2), 0); */
 	if (!print_state(p, false))
 		return (unlock_forks(&p->fork1, p->fork2), 0);
 	philo_update_state(p, EATING);
@@ -93,30 +85,23 @@ void	*philo_routine(t_philo *p)
 	pthread_mutex_lock(&p->table->start);
 	pthread_mutex_unlock(&p->table->start);
 	even = (p->n % 2 == 0);
-	/* while (!check_set_dead(p)) */
 	while (1)
 	{
-		/* if (!eat_odd(p)) */
-		/* 	return (NULL); */
 		if (even && !eat_even(p))
 			return (NULL);
 		else if (!even && !eat_odd(p))
 			return (NULL);
-		/* if (check_set_dead(p)) */
-		/* 	return (NULL); */
 		philo_update_state(p, SLEEPING);
 		if (!print_state(p, false))
 			return (NULL);
 		if (!s_usleep(p->table->slp_time, p))
 			return (NULL);
-		/* if (check_set_dead(p)) */
-		/* 	return (NULL); */
 		philo_update_state(p, THINKING);
 		if (!print_state(p, false))
 			return (NULL);
 		if (p->table->n_philos % 2 != 0
 			&& p->table->eat_time >= p->table->slp_time)
-			usleep((p->table->eat_time - p->table->slp_time) * 1100);
+			usleep((p->table->eat_time - p->table->slp_time + 1) * 1000);
 	}
 	return (NULL);
 }

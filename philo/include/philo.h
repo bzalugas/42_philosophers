@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/13 09:13:22 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 10:29:05 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ struct s_philo
 int			ft_putstr_fd(const char *s, int fd);
 int			ft_atoi(const char *nptr);
 char		*ft_lltoa_cpy(long long n, char *nb);
-int			write_number(unsigned long long n, bool space);
 
 /************************************ MAIN ************************************/
 // main_utils.c
@@ -84,8 +83,7 @@ int			print_state(t_philo *p, bool dead);
 void		*philo_routine(t_philo *p);
 
 // philo_utils.c
-bool		check_end(t_philo *p);
-bool		check_set_dead(t_philo *p);
+bool		check_dead(t_philo *p);
 bool		check_set_full(t_philo *p);
 int			s_usleep(long long ms, t_philo *p);
 

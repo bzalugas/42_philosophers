@@ -6,19 +6,19 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:00:54 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/13 09:13:34 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 10:36:51 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <unistd.h>
 
-void	ft_swrite(int fd, const void *buf, size_t count, pthread_mutex_t *mutex)
-{
-	pthread_mutex_lock(mutex);
-	write(fd, buf, count);
-	pthread_mutex_unlock(mutex);
-}
+/*voidft_swrite(int fd, const void *buf, size_t count, pthread_mutex_t *mutex)*/
+/* { */
+/* 	pthread_mutex_lock(mutex); */
+/* 	write(fd, buf, count); */
+/* 	pthread_mutex_unlock(mutex); */
+/* } */
 
 static void	create_str(t_philo *p, long long timestamp, char *str, bool dead)
 {
@@ -54,7 +54,7 @@ int	print_state(t_philo *p, bool dead)
 	pthread_mutex_lock(&p->table->fdout);
 	timestamp = get_timestamp(NULL, NULL) - p->table->start_time;
 	create_str(p, timestamp, str, dead);
-	if (!dead && check_set_dead(p))
+	if (!dead && check_dead(p))
 	{
 		pthread_mutex_unlock(&p->table->fdout);
 		return (0);
