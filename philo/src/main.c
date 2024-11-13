@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:57:22 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 14:58:00 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 08:26:44 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,13 @@ int	run_philos(t_table *t)
 
 	philos = t->philos;
 	t->start_time = get_timestamp(NULL, NULL);
+	pthread_mutex_lock(&t->start);
 	create_threads_philos(t, philos, 0);
+	pthread_mutex_unlock(&t->start);
 	usleep(100);
+	pthread_mutex_lock(&t->start);
 	create_threads_philos(t, philos, 1);
+	pthread_mutex_unlock(&t->start);
 	res = monitoring(t);
 	i = -1;
 	while (++i < t->n_philos)

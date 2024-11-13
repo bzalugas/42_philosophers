@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:50:50 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 15:26:59 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:44:30 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	monitoring(t_table *t)
 {
 	long long	timestamp;
 	int			i;
+	bool		dead;
 
 	while (!t->dead && !all_philos_full(t))
 	{
@@ -91,17 +92,20 @@ int	monitoring(t_table *t)
 		while (++i < t->n_philos && !t->dead)
 		{
 			timestamp = get_timestamp(NULL, NULL);
-			if (is_starving(&t->philos[i], timestamp))
+			pthread_mutex_lock(&t->dead_lock);
+			dead = t->dead;
+			pthread_mutex_unlock(&t->dead_lock);
+			if (is_starving(&t->philos[i], timestamp) || dead)
 			{
-				set_end(t, &t->philos[i], true);
-				print_state(&t->philos[i], true);
+				set_end(t, &t->philos[i], !dead);
+				print_state(&t->philos[i], !dead);
 				break ;
 			}
-			if (all_philos_full(t))
-			{
-				set_end(t, NULL, false);
-				break ;
-			}
+			/* if (all_philos_full(t)) */
+			/* { */
+			/* 	set_end(t, NULL, false); */
+			/* 	break ; */
+			/* } */
 		}
 	}
 	return (0);

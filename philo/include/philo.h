@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:58:24 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 15:21:32 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:13:22 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ struct s_table
 	bool			dead;
 	pthread_mutex_t	fdout;
 	t_philo			*philos;
+	pthread_mutex_t	start;
 };
 
 struct s_philo
@@ -77,7 +78,7 @@ int			monitoring(t_table *t);
 long long	get_timestamp(pthread_mutex_t *mutex, long long *var);
 
 // printing.c
-void		print_state(t_philo *p, bool dead);
+int			print_state(t_philo *p, bool dead);
 
 // philo.c
 void		*philo_routine(t_philo *p);

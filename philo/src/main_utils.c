@@ -6,7 +6,7 @@
 /*   By: bazaluga <bazaluga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:41:58 by bazaluga          #+#    #+#             */
-/*   Updated: 2024/11/12 15:28:36 by bazaluga         ###   ########.fr       */
+/*   Updated: 2024/11/13 08:25:33 by bazaluga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	init_table(t_table *t)
 	if (pthread_mutex_init(&t->fdout, NULL))
 		return (1);
 	if (pthread_mutex_init(&t->dead_lock, NULL))
+		return (1);
+	if (pthread_mutex_init(&t->start, NULL))
 		return (1);
 	return (0);
 }
