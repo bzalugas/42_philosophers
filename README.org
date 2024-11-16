@@ -1,2 +1,99 @@
 * Philosophers
 A program to illustrate the threads in C with the *[[https://en.wikipedia.org/wiki/Dining_philosophers_problem][dining philosophers problem]]*.
+
+** Threads in C
+*** Intro
+- Threads share same heap, same code, same shared libs & same fds.
+- Faster than multiple processes
+- No hierarchy between threads: all threads can wait or kill other threads. Main thread is the first that has been created at process's startup.
+
+*** Basic use of POSIX Threads
+**** Include
+- ~# include <pthread.h>~
+
+**** Compilation flag
+- ~-pthread~
+
+**** Thread creation
+#+begin_src c
+int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr,
+    void *(*start_routine)(void *), void *restrict arg);
+#+end_src
+- ~thread~: pointer to var of type pthread_t to keep id of the thread that will be created
+- ~attr~: can change default attributes of the thread. (~NULL~ in most of the cases).
+- ~start_routine~: the thread will start with this function. When the thread reaches the end of the function, it has done all its tasks.
+- ~arg~: pointer to the argument to be transmitted to the function.
+- ~RETURN VALUE~: 0 if success, else an error code.
+
+**** Waiting for thread to finish
+(like waitpid for processes)
+#+begin_src c
+int pthread_join(pthread_t thread, void **retval);
+#+end_src
+- ~thread~: id of the thread to wait for. The thread must be joinable (not detached).
+- ~retval~: pointer to variable that can contain return value of the routine function. ~NULL~ if not needed.
+- ~RETURN VALUE~: 0 if success, else an error code.
+
+**** Detaching a thread
+Used if we don't need to wait for the end of the thread. The main thread will get back ressources as soon as it stops. Once a thread is detached, it cannot be killed nor be waited.
+#+begin_src c
+int pthread_detach(pthread_t thread);
+#+end_src
+- ~RETURN VALUE~: 0 if success, else an error code.
+
+*** MUTEX
+mutex is for "*mut* ual *ex* clusion". Used to avoid data races (accessing the same ressource at the same time with multiple threads).
+**** Declare mutex variable
+#+begin_src c
+pthread_mutex_t mutex;
+#+end_src
+
+**** Initialize mutex
+#+begin_src c
+int pthread_mutex_init(phthread_mutex_t *mutex, const phtread_mutexattr_t *mutexattr);
+#+end_src
+- ~mutex~: pointer to a ~phtread_mutex_t~ variable we want to initialize.
+- ~mutexattr~: pointer to specific attributes for the mutex (can be NULL).
+- ~RETURN VALUE~: always 0.
+
+**** Lock & unlock mutex
+#+begin_src c
+int phtread_mutex_lock(pthread_mutex_t *mutex); // Lock
+int phtread_mutex_unlock(pthread_mutex_t *mutex); // Unlock
+#+end_src
+- If the mutex is already locked, the function will suspend the calling thread until the mutex is unlocked.
+- For the unlock, the function doesn't check if the mutex is already unlocked. It means that a mutex could be unlocked at the same time by multiple threads.
+- ~RETURN VALUE (same for the 2 functions)~: 0 if success, else an error code.
+
+**** Destroy a mutex
+When a mutex is not needed anymore, we need to destroy it.
+#+begin_src c
+int pthread_mutex_destroy(pthread_mutex_t *mutex);
+#+end_src
+- This function destroys only an unlocked mutex.
+
+**** Deadlocks
+A deadlock occurs when 2 threads are blocking each other: a thread is waiting for a ressource that another thread is using. Example: thread T1 has the mutex M1 & is waiting for M2. In the same time, T2 has M2 & waits for M1. *Deadlock can occur if a thread is waiting a mutex that it already has.*
+
+*** Testing thread
+- ~-fsanitize=thread -g~
+- ~valgrind --tool=helgrind~
+- ~valgrind --tool=drd~
+- fsanitize & valgrind cannot be used simultaneously.
+
+** Strategy used for the subject
+The main problem encoutered in this subject is that *we need to make sure all philos eat in time*. To achieve this, we have to *synchronize philos so they don't steal forks from others*. To be sure they're synchronized, I chose to run all the *odds philos first then the even ones*. But a problem still remains: when we have an odd number of philos, it means that a philo will eat after the odds & evens have finished. It's not a problem if the time_to_die is long enough but the risk is that the odd philo that shares a fork with him could get the fork again before him and make him starve. To prevent this, *I added a sleep during the thinking phase* for each philo if ~time_to_eat >= time_to_sleep~ to make sure no fork is stolen.
+
+A potential other problem is if all philos get their left fork first then the right. Why ? Because it could result as a *dead lock*. Imagine: 2 philos are facing. There are 2 forks on the table, let's call them 1 & 2. Philo 1 takes fork 1, philo 2 takes fork 2. Philo 1 is trying to lock fork 2, philo 2 is trying to lock fork 1. They're blocking each other and they will never stop because a mutex_lock is a blocking function that ends only when the mutex is unlocked.
+
+*Solution:* odd philos takes first the fork 1, even ones the fork 2. Simple.
+
+** Threads optimization
+In order to optimize the threads use in this project, I found out that the strategy is to use the more sleeps we can & try to not waiting a mutex for too long. Trying to lock a mutex is an action that uses cpu because it checks if the mutex is available again and again. When sleeping, a thread is doing nothing.
+
+For example, *adding a usleep after each loop in my monitoring & use a bigger one in my function s_usleep* helped me to use *~52% cpu* when running 200 philos against *835%* before any of those optimizations !
+
+Note: I tested the use of the cpu with the ~time~ function in shell when running my program.
+
+*** Conclusion
+When using threads, the best is to *synchronize mutexes* so other threads don't wait for too long before locking them & *sleep a lot* !
